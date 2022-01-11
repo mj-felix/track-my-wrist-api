@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TrackMyWristAPI.Dtos;
 using TrackMyWristAPI.Models;
 using TrackMyWristAPI.Services.WatchService;
 
@@ -18,13 +19,13 @@ namespace TrackMyWristAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Watch>>>> GetAllWatches()
+        public async Task<ActionResult<ServiceResponse<List<GetWatchDto>>>> GetAllWatches()
         {
             return Ok(await _watchService.GetAllWatches());
         }
 
         [HttpGet("{id:int}", Name = "getWatchById")]
-        public async Task<ActionResult<ServiceResponse<Watch>>> GetWatchById(int id)
+        public async Task<ActionResult<ServiceResponse<GetWatchDto>>> GetWatchById(int id)
         {
             var existingWatch = await _watchService.GetWatchById(id);
             if (existingWatch.Data == null)
@@ -35,10 +36,10 @@ namespace TrackMyWristAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<Watch>>> AddWatch(Watch watch)
+        public async Task<ActionResult<ServiceResponse<GetWatchDto>>> AddWatch(AddWatchDto watch)
         {
-            await _watchService.AddWatch(watch);
-            return new CreatedAtRouteResult("getWatchById", new { Id = watch.Id }, watch);
+            var addedWatch = await _watchService.AddWatch(watch);
+            return new CreatedAtRouteResult("getWatchById", new { Id = addedWatch.Data.Id }, addedWatch);
         }
     }
 }

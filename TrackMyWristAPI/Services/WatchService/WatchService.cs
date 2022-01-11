@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using TrackMyWristAPI.Dtos;
 using TrackMyWristAPI.Models;
 
 namespace TrackMyWristAPI.Services.WatchService
@@ -12,25 +14,33 @@ namespace TrackMyWristAPI.Services.WatchService
             new Watch{Id=2},
             new Watch{Id=3},
         };
+        private readonly IMapper _mapper;
 
-        public async Task<ServiceResponse<Watch>> AddWatch(Watch watch)
+        public WatchService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<Watch>();
-            watches.Add(watch);
-            serviceResponse.Data = watch;
+            _mapper = mapper;
+        }
+
+        public async Task<ServiceResponse<GetWatchDto>> AddWatch(AddWatchDto watch)
+        {
+            var serviceResponse = new ServiceResponse<GetWatchDto>();
+            Watch watchToAdd = _mapper.Map<Watch>(watch);
+            watchToAdd.Id = watches.Max(w => w.Id) + 1;
+            watches.Add(watchToAdd);
+            serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToAdd);
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<Watch>>> GetAllWatches()
+        public async Task<ServiceResponse<List<GetWatchDto>>> GetAllWatches()
         {
-            var serviceResponse = new ServiceResponse<List<Watch>>();
-            serviceResponse.Data = watches;
+            var serviceResponse = new ServiceResponse<List<GetWatchDto>>();
+            serviceResponse.Data = watches.Select(w => _mapper.Map<GetWatchDto>(w)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<Watch>> GetWatchById(int id)
+        public async Task<ServiceResponse<GetWatchDto>> GetWatchById(int id)
         {
-            var serviceResponse = new ServiceResponse<Watch>();
+            var serviceResponse = new ServiceResponse<GetWatchDto>();
             if (id < 1)
             {
                 serviceResponse.Data = null;
@@ -38,7 +48,7 @@ namespace TrackMyWristAPI.Services.WatchService
                 serviceResponse.Success = false;
                 return serviceResponse;
             }
-            serviceResponse.Data = watches.FirstOrDefault(w => w.Id == id);
+            serviceResponse.Data = _mapper.Map<GetWatchDto>(watches.FirstOrDefault(w => w.Id == id));
             if (serviceResponse.Data != null)
             {
                 return serviceResponse;

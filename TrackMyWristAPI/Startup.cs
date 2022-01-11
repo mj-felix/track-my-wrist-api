@@ -33,6 +33,7 @@ namespace TrackMyWristAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TrackMyWristAPI", Version = "v1" });
             });
+            services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IWatchService, WatchService>();
         }
 

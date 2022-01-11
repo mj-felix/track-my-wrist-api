@@ -1,8 +1,9 @@
 using System;
+using TrackMyWristAPI.Models;
 
-namespace TrackMyWristAPI.Models
+namespace TrackMyWristAPI.Dtos
 {
-    public class Watch
+    public class GetWatchDto
     {
         public int Id { get; set; }
         public string Manufacturer { get; set; }

@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TrackMyWristAPI.Dtos;
 using TrackMyWristAPI.Models;
 
 namespace TrackMyWristAPI.Services.WatchService
 {
     public interface IWatchService
     {
-        Task<ServiceResponse<List<Watch>>> GetAllWatches();
-        Task<ServiceResponse<Watch>> GetWatchById(int id);
-        Task<ServiceResponse<Watch>> AddWatch(Watch watch);
+        Task<ServiceResponse<List<GetWatchDto>>> GetAllWatches();
+        Task<ServiceResponse<GetWatchDto>> GetWatchById(int id);
+        Task<ServiceResponse<GetWatchDto>> AddWatch(AddWatchDto watch);
     }
 }
