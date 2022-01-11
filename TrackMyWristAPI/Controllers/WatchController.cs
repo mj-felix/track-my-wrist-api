@@ -21,10 +21,21 @@ namespace TrackMyWristAPI.Controllers
             return Ok(watches);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}", Name = "getWatchById")]
         public ActionResult<Watch> GetWatchById(int id)
         {
+            if (id < 1)
+            {
+                return NotFound();
+            }
             return Ok(watches.FirstOrDefault(w => w.Id == id));
+        }
+
+        [HttpPost]
+        public ActionResult<Watch> AddWatch(Watch watch)
+        {
+            watches.Add(watch);
+            return new CreatedAtRouteResult("getWatchById", new { Id = watch.Id }, watch);
         }
     }
 }
