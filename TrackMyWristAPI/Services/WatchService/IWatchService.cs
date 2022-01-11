@@ -6,8 +6,8 @@ namespace TrackMyWristAPI.Services.WatchService
 {
     public interface IWatchService
     {
-        Task<List<Watch>> GetAllWatches();
-        Task<Watch> GetWatchById(int id);
-        Task<Watch> AddWatch(Watch watch);
+        Task<ServiceResponse<List<Watch>>> GetAllWatches();
+        Task<ServiceResponse<Watch>> GetWatchById(int id);
+        Task<ServiceResponse<Watch>> AddWatch(Watch watch);
     }
 }

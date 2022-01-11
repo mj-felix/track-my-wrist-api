@@ -18,27 +18,27 @@ namespace TrackMyWristAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Watch>>> GetAllWatches()
+        public async Task<ActionResult<ServiceResponse<List<Watch>>>> GetAllWatches()
         {
             return Ok(await _watchService.GetAllWatches());
         }
 
         [HttpGet("{id:int}", Name = "getWatchById")]
-        public async Task<ActionResult<Watch>> GetWatchById(int id)
+        public async Task<ActionResult<ServiceResponse<Watch>>> GetWatchById(int id)
         {
             var existingWatch = await _watchService.GetWatchById(id);
-            if (existingWatch == null)
+            if (existingWatch.Data == null)
             {
-                return NotFound();
+                return NotFound(existingWatch);
             }
             return Ok(existingWatch);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Watch>> AddWatch(Watch watch)
+        public async Task<ActionResult<ServiceResponse<Watch>>> AddWatch(Watch watch)
         {
-            var newWatch = await _watchService.AddWatch(watch);
-            return new CreatedAtRouteResult("getWatchById", new { Id = newWatch.Id }, newWatch);
+            await _watchService.AddWatch(watch);
+            return new CreatedAtRouteResult("getWatchById", new { Id = watch.Id }, watch);
         }
     }
 }

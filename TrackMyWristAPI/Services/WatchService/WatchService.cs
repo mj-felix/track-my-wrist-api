@@ -13,24 +13,42 @@ namespace TrackMyWristAPI.Services.WatchService
             new Watch{Id=3},
         };
 
-        public async Task<Watch> AddWatch(Watch watch)
+        public async Task<ServiceResponse<Watch>> AddWatch(Watch watch)
         {
+            var serviceResponse = new ServiceResponse<Watch>();
             watches.Add(watch);
-            return watch;
+            serviceResponse.Data = watch;
+            return serviceResponse;
         }
 
-        public async Task<List<Watch>> GetAllWatches()
+        public async Task<ServiceResponse<List<Watch>>> GetAllWatches()
         {
-            return watches;
+            var serviceResponse = new ServiceResponse<List<Watch>>();
+            serviceResponse.Data = watches;
+            return serviceResponse;
         }
 
-        public async Task<Watch> GetWatchById(int id)
+        public async Task<ServiceResponse<Watch>> GetWatchById(int id)
         {
+            var serviceResponse = new ServiceResponse<Watch>();
             if (id < 1)
             {
-                return null;
+                serviceResponse.Data = null;
+                serviceResponse.Message = "Watch not found";
+                serviceResponse.Success = false;
+                return serviceResponse;
             }
-            return watches.FirstOrDefault(w => w.Id == id);
+            serviceResponse.Data = watches.FirstOrDefault(w => w.Id == id);
+            if (serviceResponse.Data != null)
+            {
+                return serviceResponse;
+            }
+            else
+            {
+                serviceResponse.Message = "Watch not found";
+                serviceResponse.Success = false;
+                return serviceResponse;
+            }
         }
     }
 }
