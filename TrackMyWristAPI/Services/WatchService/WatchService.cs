@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,18 +13,18 @@ namespace TrackMyWristAPI.Services.WatchService
             new Watch{Id=3},
         };
 
-        public Watch AddWatch(Watch watch)
+        public async Task<Watch> AddWatch(Watch watch)
         {
             watches.Add(watch);
             return watch;
         }
 
-        public List<Watch> GetAllWatches()
+        public async Task<List<Watch>> GetAllWatches()
         {
             return watches;
         }
 
-        public Watch GetWatchById(int id)
+        public async Task<Watch> GetWatchById(int id)
         {
             if (id < 1)
             {
