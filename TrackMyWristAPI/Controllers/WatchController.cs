@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TrackMyWristAPI.Models;
+using TrackMyWristAPI.Services.WatchService;
 
 namespace TrackMyWristAPI.Controllers
 {
@@ -9,33 +10,35 @@ namespace TrackMyWristAPI.Controllers
     [Route("api/watches")]
     public class WatchController : ControllerBase
     {
-        private static List<Watch> watches = new List<Watch>{
-            new Watch{Id=1},
-            new Watch{Id=2},
-            new Watch{Id=3},
-        };
+        private readonly IWatchService _watchService;
+
+        public WatchController(IWatchService watchService)
+        {
+            _watchService = watchService;
+        }
 
         [HttpGet]
         public ActionResult<List<Watch>> GetAllWatches()
         {
-            return Ok(watches);
+            return Ok(_watchService.GetAllWatches());
         }
 
         [HttpGet("{id:int}", Name = "getWatchById")]
         public ActionResult<Watch> GetWatchById(int id)
         {
-            if (id < 1)
+            var existingWatch = _watchService.GetWatchById(id);
+            if (existingWatch == null)
             {
                 return NotFound();
             }
-            return Ok(watches.FirstOrDefault(w => w.Id == id));
+            return Ok(existingWatch);
         }
 
         [HttpPost]
         public ActionResult<Watch> AddWatch(Watch watch)
         {
-            watches.Add(watch);
-            return new CreatedAtRouteResult("getWatchById", new { Id = watch.Id }, watch);
+            var newWatch = _watchService.AddWatch(watch);
+            return new CreatedAtRouteResult("getWatchById", new { Id = newWatch.Id }, newWatch);
         }
     }
 }

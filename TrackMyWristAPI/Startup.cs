@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using TrackMyWristAPI.Services.WatchService;
 
 namespace TrackMyWristAPI
 {
@@ -32,6 +33,7 @@ namespace TrackMyWristAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TrackMyWristAPI", Version = "v1" });
             });
+            services.AddScoped<IWatchService, WatchService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
