@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using TrackMyWristAPI.Data;
 using TrackMyWristAPI.Dtos.Watch;
@@ -14,15 +16,20 @@ namespace TrackMyWristAPI.Services.WatchService
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
-        public WatchService(IMapper mapper, DataContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public WatchService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
         public async Task<List<GetWatchDto>> GetAllWatches()
         {
-            var watches = await _context.Watches.ToListAsync();
+            var watches = await _context.Watches.Where(w => w.User.Id == GetUserId()).ToListAsync();
             return watches.Select(w => _mapper.Map<GetWatchDto>(w)).ToList();
         }
 
@@ -32,7 +39,7 @@ namespace TrackMyWristAPI.Services.WatchService
             {
                 return null;
             }
-            var watch = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
+            var watch = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == GetUserId() && w.Id == id);
             if (watch == null)
             {
                 return null;
@@ -44,6 +51,7 @@ namespace TrackMyWristAPI.Services.WatchService
         {
             {
                 Watch watchToAdd = _mapper.Map<Watch>(watch);
+                watchToAdd.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
                 _context.Watches.Add(watchToAdd);
                 await _context.SaveChangesAsync();
                 return _mapper.Map<GetWatchDto>(watchToAdd);
@@ -56,7 +64,7 @@ namespace TrackMyWristAPI.Services.WatchService
             {
                 return null;
             }
-            Watch watchToUpdate = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
+            Watch watchToUpdate = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == GetUserId() && w.Id == id);
             if (watchToUpdate == null)
             {
                 return null;
@@ -72,7 +80,7 @@ namespace TrackMyWristAPI.Services.WatchService
             {
                 return null;
             }
-            var watchToDelete = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
+            var watchToDelete = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == GetUserId() && w.Id == id);
             if (watchToDelete == null)
             {
                 return null;
