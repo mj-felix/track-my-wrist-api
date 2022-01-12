@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,12 +24,19 @@ namespace TrackMyWristAPI.Services.WatchService
 
         public async Task<ServiceResponse<GetWatchDto>> AddWatch(AddWatchDto watch)
         {
-            var serviceResponse = new ServiceResponse<GetWatchDto>();
-            Watch watchToAdd = _mapper.Map<Watch>(watch);
-            watchToAdd.Id = watches.Max(w => w.Id) + 1;
-            watches.Add(watchToAdd);
-            serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToAdd);
-            return serviceResponse;
+            try
+            {
+                var serviceResponse = new ServiceResponse<GetWatchDto>();
+                Watch watchToAdd = _mapper.Map<Watch>(watch);
+                watchToAdd.Id = watches.Max(w => w.Id) + 1;
+                watches.Add(watchToAdd);
+                serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToAdd);
+                return serviceResponse;
+            }
+            catch (Exception e)
+            {
+                return returnErrorServiceResponse(e.Message);
+            }
         }
 
         public async Task<ServiceResponse<List<GetWatchDto>>> GetAllWatches()
@@ -40,42 +48,56 @@ namespace TrackMyWristAPI.Services.WatchService
 
         public async Task<ServiceResponse<GetWatchDto>> GetWatchById(int id)
         {
-            if (id < 1)
+            try
             {
-                return returnWatchNotFoundServiceResponse();
+                if (id < 1)
+                {
+                    return returnErrorServiceResponse("Watch not found");
+                }
+                var serviceResponse = new ServiceResponse<GetWatchDto>();
+                serviceResponse.Data = _mapper.Map<GetWatchDto>(watches.FirstOrDefault(w => w.Id == id));
+                if (serviceResponse.Data == null)
+                {
+                    return returnErrorServiceResponse("Watch not found");
+                }
+                return serviceResponse;
             }
-            var serviceResponse = new ServiceResponse<GetWatchDto>();
-            serviceResponse.Data = _mapper.Map<GetWatchDto>(watches.FirstOrDefault(w => w.Id == id));
-            if (serviceResponse.Data == null)
+            catch (Exception e)
             {
-                return returnWatchNotFoundServiceResponse();
+                return returnErrorServiceResponse(e.Message);
             }
-            return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetWatchDto>> UpdateWatch(int id, UpdateWatchDto watch)
         {
-            if (id < 1)
+            try
             {
-                return returnWatchNotFoundServiceResponse();
+                if (id < 1)
+                {
+                    return returnErrorServiceResponse("Watch not found");
+                }
+                Watch watchToUpdate = watches.FirstOrDefault(w => w.Id == id);
+                if (watchToUpdate == null)
+                {
+                    return returnErrorServiceResponse("Watch not found");
+                }
+                watchToUpdate = _mapper.Map<UpdateWatchDto, Watch>(watch, watchToUpdate);
+                var serviceResponse = new ServiceResponse<GetWatchDto>();
+                serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToUpdate);
+                return serviceResponse;
             }
-            Watch watchToUpdate = watches.FirstOrDefault(w => w.Id == id);
-            if (watchToUpdate == null)
+            catch (Exception e)
             {
-                return returnWatchNotFoundServiceResponse();
+                return returnErrorServiceResponse(e.Message);
             }
-            watchToUpdate = _mapper.Map<UpdateWatchDto, Watch>(watch, watchToUpdate);
-            var serviceResponse = new ServiceResponse<GetWatchDto>();
-            serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToUpdate);
-            return serviceResponse;
         }
 
-        private ServiceResponse<GetWatchDto> returnWatchNotFoundServiceResponse()
+        private ServiceResponse<GetWatchDto> returnErrorServiceResponse(string message)
         {
             return new ServiceResponse<GetWatchDto>
             {
                 Data = null,
-                Message = "Watch not found",
+                Message = message,
                 Success = false
             };
         }
