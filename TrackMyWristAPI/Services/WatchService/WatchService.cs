@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TrackMyWristAPI.Data;
-using TrackMyWristAPI.Dtos;
+using TrackMyWristAPI.Dtos.Watch;
 using TrackMyWristAPI.Models;
 
 namespace TrackMyWristAPI.Services.WatchService

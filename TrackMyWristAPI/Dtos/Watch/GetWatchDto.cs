@@ -1,7 +1,7 @@
 using System;
 using TrackMyWristAPI.Models;
 
-namespace TrackMyWristAPI.Dtos
+namespace TrackMyWristAPI.Dtos.Watch
 {
     public class GetWatchDto
     {

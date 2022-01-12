@@ -3,7 +3,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TrackMyWristAPI.Dtos;
+using TrackMyWristAPI.Dtos.Watch;
 using TrackMyWristAPI.Services.WatchService;
 
 namespace TrackMyWristAPI.Controllers

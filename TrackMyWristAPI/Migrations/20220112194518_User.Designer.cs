@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrackMyWristAPI.Data;
 
 namespace TrackMyWristAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220112194518_User")]
+    partial class User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,28 +82,9 @@ namespace TrackMyWristAPI.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Watches");
-                });
-
-            modelBuilder.Entity("TrackMyWristAPI.Models.Watch", b =>
-                {
-                    b.HasOne("TrackMyWristAPI.Models.User", "User")
-                        .WithMany("Watches")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TrackMyWristAPI.Models.User", b =>
-                {
-                    b.Navigation("Watches");
                 });
 #pragma warning restore 612, 618
         }

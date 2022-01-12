@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TrackMyWristAPI.Dtos;
-using TrackMyWristAPI.Models;
+using TrackMyWristAPI.Dtos.Watch;
 
 namespace TrackMyWristAPI.Services.WatchService
 {

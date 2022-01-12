@@ -1,9 +1,9 @@
 using System;
 using TrackMyWristAPI.Models;
 
-namespace TrackMyWristAPI.Dtos
+namespace TrackMyWristAPI.Dtos.Watch
 {
-    public class AddWatchDto
+    public class UpdateWatchDto
     {
         public string Manufacturer { get; set; }
         public string ModelName { get; set; }

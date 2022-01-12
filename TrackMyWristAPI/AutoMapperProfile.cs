@@ -1,5 +1,5 @@
 using AutoMapper;
-using TrackMyWristAPI.Dtos;
+using TrackMyWristAPI.Dtos.Watch;
 using TrackMyWristAPI.Models;
 
 namespace TrackMyWristAPI

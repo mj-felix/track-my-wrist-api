@@ -16,5 +16,6 @@ namespace TrackMyWristAPI.Models
         public DateTime PurchasedDate { get; set; }
         public DateTime SoldDate { get; set; }
         public WatchType Type { get; set; }
+        public User User { get; set; }
     }
 }
