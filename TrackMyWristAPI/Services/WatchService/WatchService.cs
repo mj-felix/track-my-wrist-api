@@ -22,84 +22,63 @@ namespace TrackMyWristAPI.Services.WatchService
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<GetWatchDto>> AddWatch(AddWatchDto watch)
+        public async Task<GetWatchDto> AddWatch(AddWatchDto watch)
         {
-            try
             {
-                var serviceResponse = new ServiceResponse<GetWatchDto>();
                 Watch watchToAdd = _mapper.Map<Watch>(watch);
                 watchToAdd.Id = watches.Max(w => w.Id) + 1;
                 watches.Add(watchToAdd);
-                serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToAdd);
-                return serviceResponse;
-            }
-            catch (Exception e)
-            {
-                return returnErrorServiceResponse(e.Message);
+                return _mapper.Map<GetWatchDto>(watchToAdd);
             }
         }
 
-        public async Task<ServiceResponse<List<GetWatchDto>>> GetAllWatches()
+        public async Task<GetWatchDto> DeleteWatch(int id)
         {
-            var serviceResponse = new ServiceResponse<List<GetWatchDto>>();
-            serviceResponse.Data = watches.Select(w => _mapper.Map<GetWatchDto>(w)).ToList();
-            return serviceResponse;
+            if (id < 1)
+            {
+                return null;
+            }
+            var existingWatch = watches.FirstOrDefault(w => w.Id == id);
+            if (existingWatch == null)
+            {
+                return null;
+            }
+            watches.Remove(existingWatch);
+            return new GetWatchDto();
         }
 
-        public async Task<ServiceResponse<GetWatchDto>> GetWatchById(int id)
+        public async Task<List<GetWatchDto>> GetAllWatches()
         {
-            try
-            {
-                if (id < 1)
-                {
-                    return returnErrorServiceResponse("Watch not found");
-                }
-                var serviceResponse = new ServiceResponse<GetWatchDto>();
-                serviceResponse.Data = _mapper.Map<GetWatchDto>(watches.FirstOrDefault(w => w.Id == id));
-                if (serviceResponse.Data == null)
-                {
-                    return returnErrorServiceResponse("Watch not found");
-                }
-                return serviceResponse;
-            }
-            catch (Exception e)
-            {
-                return returnErrorServiceResponse(e.Message);
-            }
+            return watches.Select(w => _mapper.Map<GetWatchDto>(w)).ToList();
         }
 
-        public async Task<ServiceResponse<GetWatchDto>> UpdateWatch(int id, UpdateWatchDto watch)
+        public async Task<GetWatchDto> GetWatchById(int id)
         {
-            try
+            if (id < 1)
             {
-                if (id < 1)
-                {
-                    return returnErrorServiceResponse("Watch not found");
-                }
-                Watch watchToUpdate = watches.FirstOrDefault(w => w.Id == id);
-                if (watchToUpdate == null)
-                {
-                    return returnErrorServiceResponse("Watch not found");
-                }
-                watchToUpdate = _mapper.Map<UpdateWatchDto, Watch>(watch, watchToUpdate);
-                var serviceResponse = new ServiceResponse<GetWatchDto>();
-                serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToUpdate);
-                return serviceResponse;
+                return null;
             }
-            catch (Exception e)
+            var existingWatch = _mapper.Map<GetWatchDto>(watches.FirstOrDefault(w => w.Id == id));
+            if (existingWatch == null)
             {
-                return returnErrorServiceResponse(e.Message);
+                return null;
             }
+            return existingWatch;
         }
 
-        private ServiceResponse<GetWatchDto> returnErrorServiceResponse(string message)
+        public async Task<GetWatchDto> UpdateWatch(int id, UpdateWatchDto watch)
         {
-            return new ServiceResponse<GetWatchDto>
+            if (id < 1)
             {
-                Data = null,
-                Message = message,
-                Success = false
-            };
+                return null;
+            }
+            Watch watchToUpdate = watches.FirstOrDefault(w => w.Id == id);
+            if (watchToUpdate == null)
+            {
+                return null;
+            }
+            watchToUpdate = _mapper.Map<UpdateWatchDto, Watch>(watch, watchToUpdate);
+            return _mapper.Map<GetWatchDto>(watchToUpdate);
         }
     }
 }
