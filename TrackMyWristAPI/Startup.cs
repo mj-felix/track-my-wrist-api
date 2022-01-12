@@ -33,7 +33,23 @@ namespace TrackMyWristAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TrackMyWristAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "TrackMyWristAPI",
+                    Description = "API app to store information about wrist watches and wearing habits",
+                    License = new OpenApiLicense()
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://opensource.org/licenses/MIT")
+                    },
+                    Contact = new OpenApiContact()
+                    {
+                        Name = "MJ Felix",
+                        Email = "mjfelixdev@gmail.com",
+                        Url = new Uri("https://mjfelix.dev/")
+                    }
+                });
             });
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IWatchService, WatchService>();
