@@ -10,6 +10,7 @@ namespace TrackMyWristAPI
         {
             CreateMap<Watch, GetWatchDto>();
             CreateMap<AddWatchDto, Watch>();
+            CreateMap<UpdateWatchDto, Watch>();
         }
     }
 }

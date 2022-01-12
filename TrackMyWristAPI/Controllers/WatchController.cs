@@ -36,10 +36,21 @@ namespace TrackMyWristAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<GetWatchDto>>> AddWatch(AddWatchDto watch)
+        public async Task<ActionResult<ServiceResponse<GetWatchDto>>> AddWatch([FromBody] AddWatchDto watch)
         {
             var addedWatch = await _watchService.AddWatch(watch);
             return new CreatedAtRouteResult("getWatchById", new { Id = addedWatch.Data.Id }, addedWatch);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ServiceResponse<GetWatchDto>>> UpdateWatch(int id, [FromBody] UpdateWatchDto watch)
+        {
+            var updatedWatch = await _watchService.UpdateWatch(id, watch);
+            if (updatedWatch.Data == null)
+            {
+                return NotFound(updatedWatch);
+            }
+            return Ok(updatedWatch);
         }
     }
 }

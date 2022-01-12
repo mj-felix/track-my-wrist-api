@@ -40,25 +40,44 @@ namespace TrackMyWristAPI.Services.WatchService
 
         public async Task<ServiceResponse<GetWatchDto>> GetWatchById(int id)
         {
-            var serviceResponse = new ServiceResponse<GetWatchDto>();
             if (id < 1)
             {
-                serviceResponse.Data = null;
-                serviceResponse.Message = "Watch not found";
-                serviceResponse.Success = false;
-                return serviceResponse;
+                return returnWatchNotFoundServiceResponse();
             }
+            var serviceResponse = new ServiceResponse<GetWatchDto>();
             serviceResponse.Data = _mapper.Map<GetWatchDto>(watches.FirstOrDefault(w => w.Id == id));
-            if (serviceResponse.Data != null)
+            if (serviceResponse.Data == null)
             {
-                return serviceResponse;
+                return returnWatchNotFoundServiceResponse();
             }
-            else
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetWatchDto>> UpdateWatch(int id, UpdateWatchDto watch)
+        {
+            if (id < 1)
             {
-                serviceResponse.Message = "Watch not found";
-                serviceResponse.Success = false;
-                return serviceResponse;
+                return returnWatchNotFoundServiceResponse();
             }
+            Watch watchToUpdate = watches.FirstOrDefault(w => w.Id == id);
+            if (watchToUpdate == null)
+            {
+                return returnWatchNotFoundServiceResponse();
+            }
+            watchToUpdate = _mapper.Map<UpdateWatchDto, Watch>(watch, watchToUpdate);
+            var serviceResponse = new ServiceResponse<GetWatchDto>();
+            serviceResponse.Data = _mapper.Map<GetWatchDto>(watchToUpdate);
+            return serviceResponse;
+        }
+
+        private ServiceResponse<GetWatchDto> returnWatchNotFoundServiceResponse()
+        {
+            return new ServiceResponse<GetWatchDto>
+            {
+                Data = null,
+                Message = "Watch not found",
+                Success = false
+            };
         }
     }
 }
