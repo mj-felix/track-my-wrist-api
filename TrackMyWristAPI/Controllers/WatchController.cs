@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TrackMyWristAPI.Dtos;
-using TrackMyWristAPI.Models;
 using TrackMyWristAPI.Services.WatchService;
 
 namespace TrackMyWristAPI.Controllers
