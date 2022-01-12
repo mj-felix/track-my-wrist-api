@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using TrackMyWristAPI.Models;
 
 namespace TrackMyWristAPI.Data
@@ -10,8 +14,10 @@ namespace TrackMyWristAPI.Data
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
-        public AuthRepository(DataContext context)
+        private readonly IConfiguration _configuration;
+        public AuthRepository(DataContext context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
         }
 
@@ -28,7 +34,7 @@ namespace TrackMyWristAPI.Data
             }
             return new AuthResponse
             {
-                Token = user.Id.ToString()
+                Token = CreateToken(user)
             };
         }
 
@@ -48,7 +54,7 @@ namespace TrackMyWristAPI.Data
             await _context.SaveChangesAsync();
             return new AuthResponse
             {
-                Token = user.Id.ToString(),
+                Token = CreateToken(user)
             };
         }
 
@@ -84,6 +90,30 @@ namespace TrackMyWristAPI.Data
                 }
                 return true;
             }
+        }
+
+        private string CreateToken(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokendDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = System.DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokendDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     }
 }

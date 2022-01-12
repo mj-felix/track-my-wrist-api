@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrackMyWristAPI.Dtos.Watch;
@@ -8,6 +9,7 @@ using TrackMyWristAPI.Services.WatchService;
 
 namespace TrackMyWristAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/watches")]
     [Produces(MediaTypeNames.Application.Json)]
@@ -23,6 +25,7 @@ namespace TrackMyWristAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<GetWatchDto>>> GetAllWatches()
         {
             return Ok(await _watchService.GetAllWatches());
@@ -30,6 +33,7 @@ namespace TrackMyWristAPI.Controllers
 
         [HttpGet("{id:int}", Name = "getWatchById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetWatchDto>> GetWatchById(int id)
         {
@@ -44,6 +48,7 @@ namespace TrackMyWristAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<GetWatchDto>> AddWatch([FromBody] AddWatchDto watch)
         {
             var addedWatch = await _watchService.AddWatch(watch);
@@ -53,6 +58,7 @@ namespace TrackMyWristAPI.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetWatchDto>> UpdateWatch(int id, [FromBody] UpdateWatchDto watch)
         {
@@ -66,6 +72,7 @@ namespace TrackMyWristAPI.Controllers
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetWatchDto>> DeleteWatch(int id)
         {
