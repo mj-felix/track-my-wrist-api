@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TrackMyWristAPI.Models
 {
@@ -13,9 +14,8 @@ namespace TrackMyWristAPI.Models
         public int LugToLug { get; set; }
         public int LugWidth { get; set; }
         public int LiftAngle { get; set; }
-        public DateTime PurchasedDate { get; set; }
-        public DateTime SoldDate { get; set; }
         public WatchType Type { get; set; }
         public User User { get; set; }
+        public List<Wearing> Wearings { get; set; }
     }
 }

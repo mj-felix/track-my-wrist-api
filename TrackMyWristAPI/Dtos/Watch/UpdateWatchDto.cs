@@ -13,8 +13,6 @@ namespace TrackMyWristAPI.Dtos.Watch
         public int LugToLug { get; set; }
         public int LugWidth { get; set; }
         public int LiftAngle { get; set; }
-        public DateTime PurchasedDate { get; set; }
-        public DateTime SoldDate { get; set; }
         public WatchType Type { get; set; }
     }
 }

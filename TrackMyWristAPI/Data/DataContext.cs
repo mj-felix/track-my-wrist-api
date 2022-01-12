@@ -15,6 +15,7 @@ namespace TrackMyWristAPI.Data
         }
 
         public DbSet<Watch> Watches { get; set; }
+        public DbSet<Wearing> Wearings { get; set; }
         public DbSet<User> Users { get; set; }
     }
 }
