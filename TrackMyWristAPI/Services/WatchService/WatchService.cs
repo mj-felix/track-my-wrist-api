@@ -34,15 +34,7 @@ namespace TrackMyWristAPI.Services.WatchService
 
         public async Task<GetWatchDto> GetWatchById(int id)
         {
-            if (id < 1)
-            {
-                return null;
-            }
-            var watch = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == _userService.GetUserId() && w.Id == id);
-            if (watch == null)
-            {
-                return null;
-            }
+            var watch = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
             return _mapper.Map<GetWatchDto>(watch);
         }
 
@@ -59,15 +51,7 @@ namespace TrackMyWristAPI.Services.WatchService
 
         public async Task<GetWatchDto> UpdateWatch(int id, UpdateWatchDto watch)
         {
-            if (id < 1)
-            {
-                return null;
-            }
-            Watch watchToUpdate = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == _userService.GetUserId() && w.Id == id);
-            if (watchToUpdate == null)
-            {
-                return null;
-            }
+            Watch watchToUpdate = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
             watchToUpdate = _mapper.Map<UpdateWatchDto, Watch>(watch, watchToUpdate);
             await _context.SaveChangesAsync();
             return _mapper.Map<GetWatchDto>(watchToUpdate);
@@ -75,15 +59,7 @@ namespace TrackMyWristAPI.Services.WatchService
 
         public async Task<GetWatchDto> DeleteWatch(int id)
         {
-            if (id < 1)
-            {
-                return null;
-            }
-            var watchToDelete = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == _userService.GetUserId() && w.Id == id);
-            if (watchToDelete == null)
-            {
-                return null;
-            }
+            var watchToDelete = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
             _context.Watches.Remove(watchToDelete);
             await _context.SaveChangesAsync();
             return new GetWatchDto();

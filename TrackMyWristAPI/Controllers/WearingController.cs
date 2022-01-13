@@ -61,6 +61,7 @@ namespace TrackMyWristAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetWearingDto>> UpdateWearing(int watchId, int id, [FromBody] UpdateWearingDto wearing)
         {
             if (!await _ownershipService.WearingBelongsToWatchBelongsToUser(id, watchId))
@@ -75,6 +76,7 @@ namespace TrackMyWristAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetWearingDto>> DeleteWearing(int watchId, int id)
         {
             if (!await _ownershipService.WearingBelongsToWatchBelongsToUser(id, watchId))
