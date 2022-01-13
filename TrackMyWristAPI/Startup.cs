@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using TrackMyWristAPI.Data;
+using TrackMyWristAPI.Repositories;
 using TrackMyWristAPI.Services.UserService;
 using TrackMyWristAPI.Services.WatchService;
 using TrackMyWristAPI.Services.WearingService;

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using TrackMyWristAPI.Models;
 
-namespace TrackMyWristAPI.Data
+namespace TrackMyWristAPI.Repositories
 {
     public interface IAuthRepository
     {

@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TrackMyWristAPI.Data;
 using TrackMyWristAPI.Dtos.User;
 using TrackMyWristAPI.Models;
+using TrackMyWristAPI.Repositories;
 
 namespace TrackMyWristAPI.Controllers
 {
@@ -17,10 +14,10 @@ namespace TrackMyWristAPI.Controllers
     [Consumes(MediaTypeNames.Application.Json)]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository _authRepo;
-        public AuthController(IAuthRepository authRepo)
+        private readonly IAuthRepository _authRepository;
+        public AuthController(IAuthRepository authRepository)
         {
-            _authRepo = authRepo;
+            _authRepository = authRepository;
         }
 
         [HttpPost("register")]
@@ -28,7 +25,7 @@ namespace TrackMyWristAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AuthResponse>> Register(RegisterUserDto request)
         {
-            var response = await _authRepo.Register(new User { Email = request.Email }, request.Password);
+            var response = await _authRepository.Register(new User { Email = request.Email }, request.Password);
             if (response.Token == null)
             {
                 return BadRequest(response);
@@ -42,7 +39,7 @@ namespace TrackMyWristAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AuthResponse>> Login(LoginUserDto request)
         {
-            var response = await _authRepo.Login(request.Email, request.Password);
+            var response = await _authRepository.Login(request.Email, request.Password);
             if (response.Token == null)
             {
                 return BadRequest(response);
