@@ -15,7 +15,7 @@ namespace TrackMyWristAPI
 
             CreateMap<Wearing, GetWearingDto>();
             CreateMap<AddWearingDto, Wearing>();
-            // CreateMap<UpdateWearingDto, Wearing>();
+            CreateMap<UpdateWearingDto, Wearing>();
         }
     }
 }

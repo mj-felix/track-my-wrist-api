@@ -23,6 +23,8 @@ namespace TrackMyWristAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WatchId = table.Column<int>(type: "int", nullable: true),
+                    WorkDay = table.Column<bool>(type: "bit", nullable: false),
+                    WorkFromHomeDay = table.Column<bool>(type: "bit", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -33,7 +35,7 @@ namespace TrackMyWristAPI.Migrations
                         column: x => x.WatchId,
                         principalTable: "Watches",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

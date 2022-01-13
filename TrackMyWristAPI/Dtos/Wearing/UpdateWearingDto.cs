@@ -1,9 +1,8 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace TrackMyWristAPI.Dtos.Wearing
 {
-    public class AddWearingDto
+    public class UpdateWearingDto
     {
         public DateTime Date { get; set; }
         public bool WorkDay { get; set; }

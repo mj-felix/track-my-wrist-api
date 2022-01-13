@@ -10,8 +10,8 @@ using TrackMyWristAPI.Data;
 namespace TrackMyWristAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220113001605_WearingBools")]
-    partial class WearingBools
+    [Migration("20220113092120_Wearing")]
+    partial class Wearing
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

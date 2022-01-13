@@ -16,32 +16,42 @@ namespace TrackMyWristAPI.Services.WearingService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
-        private readonly IUserService _userService;
 
-        public WearingService(IMapper mapper, DataContext context, IUserService userService)
+        public WearingService(IMapper mapper, DataContext context)
         {
             _context = context;
             _mapper = mapper;
-            _userService = userService;
         }
 
         public async Task<GetWearingDto> AddWearing(int watchId, AddWearingDto wearing)
         {
             Wearing wearingToAdd = _mapper.Map<Wearing>(wearing);
-            wearingToAdd.Watch = await _context.Watches.FirstOrDefaultAsync(w => w.User.Id == _userService.GetUserId() && w.Id == watchId);
-            if (wearingToAdd.Watch == null)
-            {
-                return null;
-            }
+            wearingToAdd.Watch = await _context.Watches.FirstOrDefaultAsync(w => w.Id == watchId);
             _context.Wearings.Add(wearingToAdd);
             await _context.SaveChangesAsync();
             return _mapper.Map<GetWearingDto>(wearingToAdd);
         }
 
+        public async Task<GetWearingDto> UpdateWearing(int id, UpdateWearingDto wearing)
+        {
+            Wearing wearingToUpdate = await _context.Wearings.FirstOrDefaultAsync(w => w.Id == id);
+            wearingToUpdate = _mapper.Map<UpdateWearingDto, Wearing>(wearing, wearingToUpdate);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<GetWearingDto>(wearingToUpdate);
+        }
+        public async Task<GetWearingDto> DeleteWearing(int id)
+        {
+            var wearingToDelete = await _context.Wearings.FirstOrDefaultAsync(w => w.Id == id);
+            _context.Wearings.Remove(wearingToDelete);
+            await _context.SaveChangesAsync();
+            return new GetWearingDto();
+        }
+
         public async Task<List<GetWearingDto>> GetAllWearings(int watchId)
         {
-            var wearings = await _context.Wearings.Where(w => w.Watch.User.Id == _userService.GetUserId() && w.Watch.Id == watchId).ToListAsync();
+            var wearings = await _context.Wearings.Where(w => w.Watch.Id == watchId).ToListAsync();
             return wearings.Select(w => _mapper.Map<GetWearingDto>(w)).ToList();
         }
+
     }
 }

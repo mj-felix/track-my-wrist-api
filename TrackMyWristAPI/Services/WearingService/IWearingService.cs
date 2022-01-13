@@ -10,5 +10,8 @@ namespace TrackMyWristAPI.Services.WearingService
     {
         Task<List<GetWearingDto>> GetAllWearings(int watchId);
         Task<GetWearingDto> AddWearing(int watchId, AddWearingDto wearing);
+        Task<GetWearingDto> UpdateWearing(int id, UpdateWearingDto wearing);
+
+        Task<GetWearingDto> DeleteWearing(int id);
     }
 }
