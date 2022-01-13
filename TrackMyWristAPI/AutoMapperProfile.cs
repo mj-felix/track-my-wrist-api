@@ -1,5 +1,6 @@
 using AutoMapper;
 using TrackMyWristAPI.Dtos.Watch;
+using TrackMyWristAPI.Dtos.Wearing;
 using TrackMyWristAPI.Models;
 
 namespace TrackMyWristAPI
@@ -11,6 +12,10 @@ namespace TrackMyWristAPI
             CreateMap<Watch, GetWatchDto>();
             CreateMap<AddWatchDto, Watch>();
             CreateMap<UpdateWatchDto, Watch>();
+
+            CreateMap<Wearing, GetWearingDto>();
+            CreateMap<AddWearingDto, Wearing>();
+            // CreateMap<UpdateWearingDto, Wearing>();
         }
     }
 }

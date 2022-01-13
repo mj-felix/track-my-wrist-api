@@ -17,7 +17,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using TrackMyWristAPI.Data;
+using TrackMyWristAPI.Services.UserService;
 using TrackMyWristAPI.Services.WatchService;
+using TrackMyWristAPI.Services.WearingService;
 
 namespace TrackMyWristAPI
 {
@@ -65,6 +67,8 @@ namespace TrackMyWristAPI
             });
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IWatchService, WatchService>();
+            services.AddScoped<IWearingService, WearingService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
