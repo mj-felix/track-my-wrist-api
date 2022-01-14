@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using TrackMyWristAPI.Data;
+using TrackMyWristAPI.Extensions;
 using TrackMyWristAPI.Repositories;
 using TrackMyWristAPI.Services.OwnershipService;
 using TrackMyWristAPI.Services.UserService;
@@ -92,35 +93,7 @@ namespace TrackMyWristAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // if (env.IsDevelopment())
-            // {
-            //     app.UseDeveloperExceptionPage();
-            // }
-            // else
-            // {
-            app.UseExceptionHandler(
-                options =>
-                {
-                    options.Run(
-                        async context =>
-                        {
-                            var ex = context.Features.Get<IExceptionHandlerFeature>();
-                            if (ex != null)
-                            {
-                                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                                await context.Response.WriteAsJsonAsync(
-                                    new
-                                    {
-                                        Message = ex.Error.Message,
-                                        ExceptionType = ex.Error.GetType().ToString()
-                                    }
-                                );
-                            }
-                        }
-                    );
-                }
-            );
-            // }
+            app.ConfigureExceptionHandler(env);
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TrackMyWristAPI v1"));
