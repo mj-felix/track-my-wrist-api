@@ -80,7 +80,7 @@ namespace TrackMyWristAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GetWatchDto>> DeleteWatch(int id)
+        public async Task<ActionResult> DeleteWatch(int id)
         {
             if (!await _ownershipService.WatchBelongsToUser(id))
             {

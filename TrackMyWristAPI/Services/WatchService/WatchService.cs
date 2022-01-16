@@ -57,12 +57,11 @@ namespace TrackMyWristAPI.Services.WatchService
             return _mapper.Map<GetWatchDto>(watchToUpdate);
         }
 
-        public async Task<GetWatchDto> DeleteWatch(int id)
+        public async Task<int> DeleteWatch(int id)
         {
             var watchToDelete = await _context.Watches.FirstOrDefaultAsync(w => w.Id == id);
             _context.Watches.Remove(watchToDelete);
-            await _context.SaveChangesAsync();
-            return new GetWatchDto();
+            return await _context.SaveChangesAsync();
         }
     }
 }

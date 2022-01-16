@@ -10,6 +10,6 @@ namespace TrackMyWristAPI.Services.WatchService
         Task<GetWatchDto> GetWatchById(int id);
         Task<GetWatchDto> AddWatch(AddWatchDto watch);
         Task<GetWatchDto> UpdateWatch(int id, UpdateWatchDto watch);
-        Task<GetWatchDto> DeleteWatch(int id);
+        Task<int> DeleteWatch(int id);
     }
 }
