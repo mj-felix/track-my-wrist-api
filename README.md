@@ -12,6 +12,7 @@ Coming soon ...
 
 Not in order of priority:
 
+- Upgrade to .NET 6
 - Abstract data layer better
 - Add logging
 - Add example of integration tests
