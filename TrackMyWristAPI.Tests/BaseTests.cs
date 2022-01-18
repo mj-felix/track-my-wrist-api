@@ -4,12 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using TrackMyWristAPI.Data;
+using TrackMyWristAPI.Services.UserService;
 
 namespace TrackMyWristAPI.Tests
 {
     public class BaseTests
     {
+        protected IMapper Mapper { get; }
+        protected Mock<IUserService> UserServiceStub { get; } = new();
+
+        public BaseTests()
+        {
+            Mapper = BuildMap();
+        }
+
         protected DataContext BuildContext(string databaseName)
         {
             var options = new DbContextOptionsBuilder<DataContext>()
@@ -19,7 +29,7 @@ namespace TrackMyWristAPI.Tests
             return dataContext;
         }
 
-        protected IMapper BuildMap()
+        private IMapper BuildMap()
         {
             var config = new MapperConfiguration(options =>
             {
