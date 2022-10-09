@@ -4,10 +4,6 @@ API app to store information about wrist watches and wearing habits.
 
 Created as part of C#/.NET learning at [EndGame](https://www.end-game.com) using resources listed in [References](#references).
 
-## Installation Instructions
-
-Coming soon ...
-
 ## Backlog
 
 Not in order of priority:
